@@ -2,35 +2,32 @@ require("dotenv").config();
 const hre = require("hardhat");
 
 async function main() {
-  const { ethers } = hre;  // Use ethers from hre (Hardhat Runtime Environment)
+  const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with:", deployer.address);
 
-  let stablecoinAddress = process.env.STABLECOIN_ADDRESS;
-  console.log("Loaded STABLECOIN_ADDRESS from env:", stablecoinAddress);
+  // Deploy Mock Stablecoin
+  const MockStablecoin = await ethers.getContractFactory("MockStablecoin");
+  const mockStablecoin = await MockStablecoin.deploy();
+  console.log("Waiting for MockStablecoin to deploy...");
+  await mockStablecoin.waitForDeployment(); // ⬅ Correct method for newer ethers versions
 
-  // Validate and checksum the address
-  try {
-    stablecoinAddress = ethers.utils.getAddress(stablecoinAddress); // converts to checksummed address
-  } catch (err) {
-    throw new Error("⚠️ STABLECOIN_ADDRESS is not a valid Ethereum address.");
-  }
+  const stablecoinAddress = await mockStablecoin.getAddress(); // ⬅ New way to get address
+  console.log("✅ MockStablecoin deployed at:", stablecoinAddress);
 
-  if (!ethers.utils.isAddress(stablecoinAddress)) {
-    throw new Error("⚠️ Invalid or missing STABLECOIN_ADDRESS in .env");
-  }
-
-  console.log("Using stablecoin address:", stablecoinAddress);
-
+  // Deploy DeliveryContract using the mock token
   const Delivery = await ethers.getContractFactory("DeliveryContract");
   const delivery = await Delivery.deploy(stablecoinAddress);
-  await delivery.deployed();
-  console.log("✅ DeliveryContract deployed to:", delivery.address);
+  console.log("Waiting for DeliveryContract to deploy...");
+  await delivery.waitForDeployment();
+  console.log("✅ DeliveryContract deployed to:", await delivery.getAddress());
 
+  // Deploy ReputationNFT
   const NFT = await ethers.getContractFactory("ReputationNFT");
   const nft = await NFT.deploy();
-  await nft.deployed();
-  console.log("✅ ReputationNFT deployed to:", nft.address);
+  console.log("Waiting for ReputationNFT to deploy...");
+  await nft.waitForDeployment();
+  console.log("✅ ReputationNFT deployed to:", await nft.getAddress());
 }
 
 main().catch((error) => {

@@ -6,7 +6,7 @@ module.exports = {
   networks: {
     morph: {
       url: process.env.MORPH_RPC,
-      accounts: [`0x${process.env.PRIVATE_KEY}`],
+      accounts: [process.env.PRIVATE_KEY],
     },
   },
 };
