@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Package, Award, CheckCircle, Clock, Star } from "lucide-react";
 import { formatAmount, useCompleteRequest } from "@/hooks/contracts";
+import { useGetDeliveries } from "@/hooks/reputationNFT";
+import { useAccount } from "wagmi";
 
 interface DeliveryRequest {
   id: number;
@@ -20,6 +22,8 @@ interface DeliveryRequest {
 }
 
 export const DriverDashboard = () => {
+  const account = useAccount()
+  const { data: deliveries } = useGetDeliveries(account.address as `0x${string}`)
   const [requests, setRequests] = useState<DeliveryRequest[]>([
     {
       id: 1,
@@ -42,9 +46,9 @@ export const DriverDashboard = () => {
   ]);
 
   const [driverStats, setDriverStats] = useState({
-    totalDeliveries: 12,
-    nftBadges: 2,
-    nextBadgeIn: 3,
+    totalDeliveries: Number(deliveries) || 0,
+    nftBadges: Number(deliveries) >= 5 ? Math.floor(Number(deliveries) / 5) : 0,
+    nextBadgeIn: 5 - (Number(deliveries) % 5) || 0,
   });
 
   const { toast } = useToast();

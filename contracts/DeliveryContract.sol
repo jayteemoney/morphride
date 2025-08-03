@@ -52,4 +52,8 @@ contract DeliveryContract {
 
         emit RequestCompleted(_requestId, msg.sender);
     }
+
+    function getUserRequests(address _user) external view returns (Request[] memory) {
+        return userRequests[_user];
+    }
 }
