@@ -20,6 +20,7 @@ contract DeliveryContract {
     }
 
     mapping(uint => Request) public requests;
+    mapping(address => Request[]) public userRequests;
 
     event RequestCreated(uint requestId, address user, address driver, uint amount);
     event RequestCompleted(uint requestId, address driver);
@@ -35,6 +36,7 @@ contract DeliveryContract {
         stablecoin.transferFrom(msg.sender, address(this), _amount);
 
         requests[requestCounter] = Request(msg.sender, _driver, _amount, false);
+        userRequests[msg.sender].push(requests[requestCounter]);
         emit RequestCreated(requestCounter, msg.sender, _driver, _amount);
 
         requestCounter++;
