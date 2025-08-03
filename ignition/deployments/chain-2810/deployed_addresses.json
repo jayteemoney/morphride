@@ -1,5 +1,5 @@
 {
-  "Deploy#MockStablecoin": "0x350ef55087B8aBc14B2458232EC7d9d49B0CC6f7",
-  "Deploy#ReputationNFT": "0x3f63c1AC1EBFf0babdb41fA1a6b7261D23bDC552",
-  "Deploy#DeliveryContract": "0x1106661FB7104CFbd35E8477796D8CD9fB3806f2"
+  "Deploy#MockStablecoin": "0xF2268d8133687e40AC174bCcA150677c42D74233",
+  "Deploy#ReputationNFT": "0xEAE3b6033d744b8E0e817269df92004F3069bfB1",
+  "Deploy#DeliveryContract": "0xa97C9C8dD22db815a4AB3E3279562FD379F925c6"
 }
